@@ -5,7 +5,6 @@ from database import log_audit_trail, log_attestation
 st.title("AML / BSA 5-Pillar Program + CFIUS & Export Controls")
 st.caption("$1B AUM Hedge Fund RIA – FinCEN IA Rule + National Security Requirements")
 
-# Single row of tabs with natural scrolling (best for 6+ tabs)
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "1. Risk Assessment",
     "2. Enhanced Due Diligence (EDD)",
@@ -18,37 +17,48 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
 with tab1:
     st.subheader("Annual AML Risk Assessment")
     st.markdown("**Pillar 1** – Risk-Based Approach")
-    # ← Place your existing Risk Assessment code here
+    st.info("Use the interactive sliders below to calculate residual risk.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        investor_risk = st.slider("Investor Base Risk", 1, 10, 5)
+        product_risk = st.slider("Product / Strategy Risk", 1, 10, 6)
+        geo_risk = st.slider("Geographic / Sanctions Risk", 1, 10, 4)
+    with col2:
+        control_strength = st.slider("Control Effectiveness", 1, 10, 7)
+
+    inherent = round((investor_risk + product_risk + geo_risk) / 3, 1)
+    residual = round(inherent - (control_strength / 2), 1)
+    risk_level = "🔴 HIGH" if residual >= 8 else "🟠 MEDIUM" if residual >= 5 else "🟢 LOW"
+
+    st.metric("Residual Risk Score", f"{residual} {risk_level}")
+
+    if st.button("Save & Sign Risk Assessment"):
+        st.success("Risk Assessment signed and saved.")
+        log_audit_trail(st.session_state.username, "AML Risk Assessment", f"Residual: {residual}", "Unknown")
 
 with tab2:
     st.subheader("Enhanced Due Diligence (EDD) Procedures")
     st.markdown("**Pillar 2 & 5** – Applied when risk is elevated.")
 
-    st.write("**EDD Triggers (Hedge Fund Specific)**")
-    edd_triggers = [
-        "Investor or beneficial owner is a PEP or close associate",
-        "Investor resides in or funds originate from high-risk jurisdiction",
-        "Investment > $5M or >10% of fund AUM",
-        "Complex corporate/trust structure with unidentified beneficial owners",
-        "Unusual transaction patterns (rapid inflows + early redemptions)",
-        "Requests for preferential treatment via side letters",
-        "Negative adverse media or sanctions hits",
-        "Source of funds/wealth unclear or inconsistent with profile"
-    ]
-    for trigger in edd_triggers:
-        st.checkbox(trigger)
+    st.write("**EDD Triggers**")
+    for item in [
+        "PEP or close associate", "High-risk jurisdiction", "Investment > $5M or >10% AUM",
+        "Complex ownership structure", "Unusual transaction patterns", "Side letter requests",
+        "Adverse media hits", "Unclear source of wealth"
+    ]:
+        st.checkbox(item)
 
     st.write("**Required EDD Procedures**")
-    edd_procedures = [
+    for item in [
         "In-depth Source of Wealth verification",
         "Full Beneficial Ownership mapping",
-        "Enhanced adverse media & sanctions screening",
+        "Enhanced sanctions & media screening",
         "Senior management approval via DocuSign",
-        "Enhanced ongoing monitoring (monthly reviews)",
-        "All documentation retained for 5 years"
-    ]
-    for procedure in edd_procedures:
-        st.checkbox(procedure, value=True)
+        "Enhanced ongoing monitoring",
+        "All records retained 5 years"
+    ]:
+        st.checkbox(item, value=True)
 
 with tab3:
     st.subheader("Pillar 3 – Ongoing Training")
@@ -63,63 +73,67 @@ with tab5:
     st.subheader("Pillar 5 – CIP / KYC / CDD / SAR / Monitoring")
     st.info("CIP, KYC, CDD, SAR filing, and transaction monitoring tools are available here.")
 
+    sub1, sub2, sub3, sub4 = st.tabs(["CIP & KYC", "CDD Form", "SAR Filing", "Transaction Monitoring"])
+
+    with sub1:
+        st.subheader("CIP & KYC Onboarding")
+        st.write("**CIP Requirements**: Name, DOB/formation date, address, TIN, photo ID verification.")
+        with st.form("cip_form"):
+            name = st.text_input("Investor Name")
+            if st.form_submit_button("Complete CIP/KYC & Sign"):
+                st.success(f"CIP/KYC completed for {name}.")
+                log_audit_trail(st.session_state.username, "CIP/KYC Completed", f"Investor: {name}", "Unknown")
+
+    with sub2:
+        st.subheader("Customer Due Diligence (CDD)")
+        with st.form("cdd_form"):
+            investor = st.text_input("Investor Name")
+            amount = st.number_input("Investment Amount ($)", min_value=0)
+            if st.form_submit_button("Submit CDD & Sign"):
+                st.success(f"CDD submitted for {investor}.")
+                log_audit_trail(st.session_state.username, "CDD Submitted", f"Investor: {investor}", "Unknown")
+
+    with sub3:
+        st.subheader("SAR Filing")
+        st.write("Escalate within 24h → File with FinCEN within 30 days.")
+        with st.form("sar_form"):
+            suspect = st.text_input("Suspect Name")
+            desc = st.text_area("Suspicious Activity")
+            if st.form_submit_button("Log SAR"):
+                st.success(f"SAR logged for {suspect}.")
+                log_audit_trail(st.session_state.username, "SAR Filed", f"Suspect: {suspect}", "Unknown")
+
+    with sub4:
+        st.subheader("Transaction Monitoring Rules")
+        rules = [
+            "Monitor wires to high-risk jurisdictions",
+            "Flag rapid inflow + quick redemption",
+            "Review changes in wire instructions",
+            "Detect structuring attempts"
+        ]
+        for rule in rules:
+            st.checkbox(rule)
+
 with tab6:
-    st.subheader("CFIUS & Export Controls Compliance")
-    st.markdown("**National Security Requirements**")
-
-    st.write("### CFIUS Compliance")
-    st.write("**Key CFIUS Triggers**")
-    cfius_triggers = [
-        "Foreign investor acquiring control or significant influence",
-        "Investment in critical technology",
-        "Investment in critical infrastructure",
-        "Access to sensitive personal data of U.S. citizens",
-        "Foreign government-linked investors"
-    ]
-    for trigger in cfius_triggers:
-        st.checkbox(trigger)
-
+    st.subheader("CFIUS & Export Controls")
     st.write("**CFIUS Critical Technologies Examples**")
-    critical_tech = [
-        "Artificial Intelligence and machine learning systems",
-        "Semiconductors and semiconductor manufacturing equipment",
-        "Quantum computing and quantum information sciences",
-        "Biotechnology and biological technologies",
-        "Advanced robotics and autonomous systems",
-        "Additive manufacturing (3D printing) for defense applications",
-        "Advanced materials and metamaterials",
-        "Aerospace and defense-related technologies",
-        "Nuclear technologies",
-        "Encryption and cybersecurity technologies"
-    ]
-    for item in critical_tech:
+    for item in [
+        "Artificial Intelligence & Machine Learning",
+        "Semiconductors & Manufacturing Equipment",
+        "Quantum Computing",
+        "Biotechnology",
+        "Advanced Robotics",
+        "Aerospace & Defense Technologies"
+    ]:
         st.checkbox(item)
 
-    st.write("**CFIUS Mitigation Agreements** (when required)")
-    mitigation = [
-        "Establish a U.S.-based security committee with independent directors",
-        "Appoint a CFIUS-approved security officer",
-        "Implement strict data segregation and access controls",
-        "Limit foreign investor access to critical technology",
-        "Require CFIUS approval for key changes in ownership or personnel",
-        "Undergo regular third-party audits and compliance reporting"
-    ]
-    for item in mitigation:
+    st.write("**Export Controls Compliance**")
+    for item in [
+        "Screen for ITAR-controlled items",
+        "Screen for EAR dual-use technology",
+        "Obtain licenses when required",
+        "Include export clauses in agreements"
+    ]:
         st.checkbox(item, value=True)
 
-    st.write("### Export Controls Compliance (ITAR & EAR)")
-    st.write("**Required Procedures**")
-    export_controls = [
-        "Screen investments for ITAR-controlled defense articles",
-        "Screen for EAR-controlled dual-use items and technology",
-        "Implement controls to prevent unauthorized export of technical data",
-        "Obtain export licenses when required",
-        "Include export control clauses in subscription agreements",
-        "Train deal teams and compliance staff on export controls"
-    ]
-    for item in export_controls:
-        st.checkbox(item, value=True)
-
-    st.info("**Note**: CFIUS and Export Controls often overlap with investor onboarding and due diligence processes.")
-
-st.sidebar.info("BSA Officer: Chief Compliance Officer\nCFIUS and Export Controls are critical national security requirements.")
+st.sidebar.info("BSA Officer: Chief Compliance Officer")

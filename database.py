@@ -6,6 +6,13 @@ import os
 os.makedirs('data', exist_ok=True)
 
 def init_db():
+    conn = sqlite3.connect('data/compliance.db')
+    c = conn.cursor()
+    # ... your existing table creation code ...
+    conn.commit()
+    conn.close()
+
+def init_db():
     """Initialize all database tables"""
     conn = sqlite3.connect('data/compliance.db')
     c = conn.cursor()
@@ -83,6 +90,8 @@ def log_audit_trail(username, action, details, ip="Unknown"):
               (datetime.now().isoformat(), username, action, details, ip))
     conn.commit()
     conn.close()
+
+
 
 def log_attestation(username, policy_title, drive_file_id=None, envelope_id=None, status="Sent"):
     """Log policy attestations"""

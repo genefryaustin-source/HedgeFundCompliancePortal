@@ -2,8 +2,8 @@ import streamlit as st
 from datetime import datetime
 from database import log_audit_trail, log_attestation
 
-st.title("AML / BSA 5-Pillar Program + CFIUS & FCPA Compliance")
-st.caption("$1B AUM Hedge Fund RIA – FinCEN IA Rule + National Security & Anti-Corruption Requirements")
+st.title("AML / BSA 5-Pillar Program + CFIUS & Export Controls")
+st.caption("$1B AUM Hedge Fund RIA – FinCEN IA Rule + National Security Requirements")
 
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "1. Risk Assessment",
@@ -11,16 +11,17 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "3. Training",
     "4. Independent Testing",
     "5. CIP / KYC / CDD / SAR / Monitoring",
-    "6. CFIUS & FCPA Compliance"
+    "6. CFIUS & Export Controls"
 ])
 
 with tab1:
     st.subheader("Annual AML Risk Assessment")
-    # (Your existing risk assessment code remains here)
+    st.markdown("**Pillar 1** – Risk-Based Approach")
+    # Your existing risk assessment code can stay here
 
 with tab2:
     st.subheader("Enhanced Due Diligence (EDD) Procedures")
-    # (Your existing EDD section remains here)
+    # Your existing EDD section can stay here
 
 with tab3:
     st.subheader("Pillar 3 – Ongoing Training")
@@ -36,91 +37,74 @@ with tab5:
     st.info("CIP, KYC, CDD, SAR filing, and transaction monitoring tools are available here.")
 
 with tab6:
-    st.subheader("CFIUS & FCPA Compliance")
-    st.markdown("**National Security & Anti-Corruption Requirements** – Critical for hedge funds with foreign investors or international activities.")
+    st.subheader("CFIUS & Export Controls Compliance")
+    st.markdown("**National Security Requirements** – Critical for hedge funds with foreign investors or technology exposure.")
 
+    # ====================== CFIUS SECTION ======================
     st.write("### CFIUS (Committee on Foreign Investment in the United States)")
-    st.write("CFIUS reviews transactions that could result in foreign control or influence over U.S. businesses involving critical technology, infrastructure, or sensitive data.")
+    st.write("CFIUS reviews transactions involving foreign investment in U.S. businesses that could affect national security.")
 
-    # CFIUS Triggers and Procedures (kept from previous)
-    st.write("**Key CFIUS Triggers**")
-    cfius_triggers = [
-        "Foreign investor acquiring control or significant influence",
-        "Investment in critical technology (AI, semiconductors, biotech)",
-        "Investment in critical infrastructure",
-        "Access to sensitive personal data of U.S. citizens",
-        "Foreign government-linked investors"
+    st.write("**CFIUS Critical Technologies Examples**")
+    critical_tech = [
+        "Artificial Intelligence and machine learning systems",
+        "Semiconductors and semiconductor manufacturing equipment",
+        "Quantum computing and quantum information sciences",
+        "Biotechnology and biological technologies (including synthetic biology)",
+        "Advanced robotics and autonomous systems",
+        "Additive manufacturing (3D printing) for defense applications",
+        "Advanced materials (e.g., metamaterials, high-performance composites)",
+        "Aerospace and defense-related technologies",
+        "Nuclear technologies and nuclear power systems",
+        "Encryption and cybersecurity technologies with national security applications"
     ]
-    for trigger in cfius_triggers:
-        st.checkbox(trigger)
+    for item in critical_tech:
+        st.checkbox(item)
 
-    st.write("**Required CFIUS Procedures**")
-    cfius_procedures = [
-        "Pre-investment CFIUS risk assessment for foreign investors",
-        "Determine mandatory declaration or voluntary notice filing",
-        "Engage specialized CFIUS counsel",
-        "Ongoing monitoring of foreign ownership and influence"
-    ]
-    for procedure in cfius_procedures:
-        st.checkbox(procedure, value=True)
+    st.write("**CFIUS Mandatory Declaration Triggers**")
+    st.write("A short-form declaration is **mandatory** if the investment involves critical technology **and** the foreign investor gains certain rights (board observer, access to technical information, or substantive decision-making).")
 
-    # === NEW: Expanded CFIUS Mitigation Agreements ===
-    st.write("### CFIUS Mitigation Agreements")
+    # ====================== EXPORT CONTROLS SECTION ======================
+    st.subheader("Export Controls Compliance (ITAR & EAR)")
     st.markdown("""
-    When CFIUS identifies national security concerns, it may require **mitigation agreements** before approving the transaction. 
-    These are legally binding agreements between the parties and CFIUS.
+    U.S. export control laws (ITAR and EAR) restrict the export of defense articles, dual-use items, and technical data. 
+    Hedge funds must ensure compliance when investing in or providing funding to companies involved in controlled technologies.
     """)
 
-    mitigation_steps = [
-        "Establish a U.S.-based security committee with independent directors",
-        "Appoint a CFIUS-approved security officer with veto rights over certain decisions",
-        "Implement strict information security protocols and data segregation",
-        "Limit foreign investor access to critical technology or sensitive data",
-        "Require CFIUS approval for any change in ownership or key personnel",
-        "Undergo regular third-party audits and compliance reporting",
-        "Maintain detailed records of all mitigation measures for CFIUS review",
-        "Include termination rights or divestiture requirements if compliance fails"
+    st.write("**Key Export Controls Requirements**")
+    export_controls = [
+        "Screen all investments for involvement in ITAR-controlled defense articles or services",
+        "Screen for EAR-controlled dual-use items and technology (especially items on the Commerce Control List)",
+        "Implement controls to prevent unauthorized export of technical data or software",
+        "Obtain export licenses when required before sharing controlled technology with foreign investors",
+        "Maintain records of all export control assessments and licenses (minimum 5 years)",
+        "Train relevant staff (deal teams, compliance, legal) on export control obligations",
+        "Include export control clauses in subscription agreements and side letters",
+        "Conduct periodic audits of portfolio companies for export compliance",
+        "Immediately escalate any suspected violations to senior management and legal counsel"
     ]
-    for step in mitigation_steps:
-        st.checkbox(step, value=True)
+    for item in export_controls:
+        st.checkbox(item, value=True)
 
-    st.info("**Hedge Fund Note**: Mitigation agreements often require governance changes (e.g., board observer rights limitations) and can be costly to implement and monitor.")
-
-    # === NEW: Full FCPA Compliance Procedures ===
-    st.subheader("FCPA (Foreign Corrupt Practices Act) Compliance Procedures")
-    st.markdown("""
-    The FCPA prohibits bribery of foreign officials and requires accurate books and records. 
-    Hedge funds must have robust anti-corruption controls, especially when dealing with foreign investors, deal sourcing, or emerging markets.
+    st.info("""
+    **Practical Hedge Fund Considerations**:
+    - Even minority investments can trigger export control issues if the fund gains access to controlled technical data.
+    - Side letters requesting information rights can inadvertently create export control violations.
+    - Portfolio companies developing dual-use technologies require heightened scrutiny.
     """)
 
-    fcpa_procedures = [
-        "Adopt a written Anti-Bribery & Corruption Policy",
-        "Conduct FCPA due diligence on all foreign investors, intermediaries, and deal partners",
-        "Implement gifts, hospitality, and entertainment approval procedures with clear monetary limits",
-        "Prohibit facilitation payments (grease payments)",
-        "Require anti-corruption clauses in all contracts with foreign parties",
-        "Maintain accurate books and records of all payments and expenses",
-        "Provide annual FCPA training to deal teams, compliance, and senior management",
-        "Establish confidential reporting mechanisms (hotline) for suspected violations",
-        "Conduct periodic risk assessments and third-party audits of high-risk relationships",
-        "Immediately investigate and report any suspected FCPA violations to senior management and legal counsel"
-    ]
-    for procedure in fcpa_procedures:
-        st.checkbox(procedure, value=True)
-
-    st.info("**FCPA Penalties**: Civil and criminal fines, disgorgement of profits, and potential debarment from U.S. government contracts. Individuals can face imprisonment.")
-
-    # Interactive CFIUS / FCPA Assessment Form
-    st.subheader("CFIUS / FCPA Risk Assessment Form")
-    with st.form("cfius_fcpa_form"):
+    # Interactive CFIUS / Export Controls Assessment Form
+    st.subheader("CFIUS & Export Controls Risk Assessment Form")
+    with st.form("cfius_export_form"):
         entity = st.text_input("Investor / Entity Name")
         country = st.selectbox("Country of Origin", ["China", "Russia", "Other Country of Concern", "Allied Country", "Other"])
-        risk_area = st.selectbox("Primary Risk Area", ["CFIUS (National Security)", "FCPA (Anti-Bribery)", "Both"])
+        involves_critical_tech = st.checkbox("Involves Critical Technology?")
+        involves_export_control = st.checkbox("Involves Export-Controlled Items or Technical Data?")
         notes = st.text_area("Assessment Notes / Mitigation Steps")
         submitted = st.form_submit_button("Submit Assessment & Sign")
         if submitted:
-            st.success(f"Assessment completed for **{entity}**.")
-            log_audit_trail(st.session_state.username, "CFIUS/FCPA Assessment", f"Entity: {entity} | Area: {risk_area}", "Unknown")
-            log_attestation(st.session_state.username, f"CFIUS/FCPA - {entity}")
+            risk_level = "High" if (country in ["China", "Russia", "Other Country of Concern"] and (involves_critical_tech or involves_export_control)) else "Medium"
+            st.success(f"Assessment completed for **{entity}** – Risk Level: **{risk_level}**")
+            log_audit_trail(st.session_state.username, "CFIUS/Export Controls Assessment", f"Entity: {entity} | Risk: {risk_level}", "Unknown")
+            log_attestation(st.session_state.username, f"CFIUS/Export Controls - {entity}")
 
-st.sidebar.info("BSA Officer: Chief Compliance Officer\nCFIUS and FCPA compliance are critical national security and anti-corruption requirements.")
+st.sidebar.info("BSA Officer: Chief Compliance Officer\nCFIUS and Export Controls are critical national security requirements.")

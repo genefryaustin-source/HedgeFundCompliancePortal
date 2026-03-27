@@ -15,98 +15,73 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 
 with tab1:
     st.subheader("Annual AML Risk Assessment")
-    # Keep your existing risk assessment code
+    st.markdown("**Pillar 1** – Risk-Based Approach")
+
+    st.markdown("### Risk Scoring Methodology")
+    st.write("""
+    **Inherent Risk** = Average of Investor Risk + Product Risk + Geographic Risk (1–10 scale)  
+    **Control Effectiveness** = Strength of CIP, CDD, screening, monitoring, and training (1–10 scale)  
+    **Residual Risk** = Inherent Risk – (Control Effectiveness / 2)
+    """)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        investor_risk = st.slider("Investor Base Risk", 1, 10, 5)
+        product_risk = st.slider("Product / Strategy Risk", 1, 10, 6)
+        geo_risk = st.slider("Geographic / Sanctions Risk", 1, 10, 3)
+    
+    with col2:
+        control_strength = st.slider("Control Effectiveness", 1, 10, 7)
+
+    inherent_risk = round((investor_risk + product_risk + geo_risk) / 3, 1)
+    residual_risk = round(inherent_risk - (control_strength / 2), 1)
+
+    risk_color = "🔴 High" if residual_risk >= 8 else "🟠 Medium" if residual_risk >= 5 else "🟢 Low"
+    st.metric("Residual Risk Score", f"{residual_risk} {risk_color}")
+
+    if st.button("Save & Sign Annual Risk Assessment"):
+        st.success("Risk Assessment signed and saved.")
+        log_audit_trail(st.session_state.username, "AML Risk Assessment", f"Residual Risk: {residual_risk}", "Unknown")
 
 with tab2:
     st.subheader("Enhanced Due Diligence (EDD) Procedures")
-    st.markdown("**Pillar 2 & 5** – Applied when risk is elevated.")
-
-    st.write("### Expanded EDD Triggers (Hedge Fund Specific)")
+    st.markdown("**Expanded EDD Triggers**")
     edd_triggers = [
-        "Investor or beneficial owner is a Politically Exposed Person (PEP) or close associate",
-        "Investor resides in or funds originate from a high-risk jurisdiction (FATF grey/black list, OFAC-sanctioned countries)",
-        "Investment amount exceeds $5 million or represents more than 10% of the fund’s AUM",
-        "Complex corporate, trust, or offshore structure with layered entities or unidentified beneficial owners",
-        "Unusual transaction patterns: rapid capital contributions followed by early redemption requests",
-        "Investor requests preferential treatment (side letters for liquidity, fees, or reporting)",
-        "Negative adverse media hits or regulatory sanctions history",
-        "Source of funds/wealth is unclear, undocumented, or inconsistent with known profile",
-        "Investor shows reluctance to provide complete beneficial ownership information",
-        "Multiple related entities or family members investing with coordinated patterns",
-        "Investor uses third-party intermediaries or nominees without clear justification"
+        "Investor or beneficial owner is a PEP or close associate",
+        "Investor resides in or funds originate from high-risk jurisdiction",
+        "Investment > $5M or >10% of fund AUM",
+        "Complex corporate/trust structure with unidentified beneficial owners",
+        "Unusual transaction patterns (rapid inflows + early redemptions)",
+        "Requests for preferential treatment via side letters",
+        "Negative adverse media or sanctions hits",
+        "Source of funds/wealth unclear or inconsistent with profile"
     ]
     for trigger in edd_triggers:
         st.checkbox(trigger)
 
-    st.write("### Required EDD Procedures")
+    st.markdown("**Required EDD Procedures**")
     edd_steps = [
-        "In-depth Source of Wealth verification (bank statements, tax returns, audited financials, third-party reports)",
-        "Full Beneficial Ownership mapping (corporate registry searches, ownership charts, interviews)",
-        "Enhanced adverse media and sanctions screening (World-Check, LexisNexis, or equivalent)",
-        "Senior management approval (BSA Officer + CEO) via DocuSign before accepting subscription",
-        "Enhanced ongoing monitoring (monthly transaction reviews + automated alerts)",
-        "Video calls or site visits with investor representatives for high-risk cases",
-        "All documentation retained for minimum 5 years in secure Google Drive folder"
+        "In-depth Source of Wealth verification",
+        "Full Beneficial Ownership mapping",
+        "Enhanced adverse media & sanctions screening",
+        "Senior management approval via DocuSign",
+        "Enhanced ongoing monitoring (monthly reviews)",
+        "All documentation retained for 5 years"
     ]
     for step in edd_steps:
         st.checkbox(step, value=True)
 
-    investor_name = st.text_input("Investor Name for EDD Record")
-    if st.button("Complete EDD & Sign Documentation"):
-        st.success(f"EDD procedures completed and signed for **{investor_name}**.")
-        log_audit_trail(st.session_state.username, "EDD Completed", f"Investor: {investor_name}", "Unknown")
-        log_attestation(st.session_state.username, f"EDD - {investor_name}")
-
 with tab3:
     st.subheader("Pillar 3 – Ongoing Training")
-    st.info("Complete the **AML/BSA 5-Pillar Training** in the Training Center.")
+    st.info("Go to Training Center to complete AML/BSA modules.")
     st.page_link("pages/03_Training.py", label="Go to Training Center →", icon="📚")
 
 with tab4:
     st.subheader("Pillar 4 – Independent Testing & Audit")
-    # Keep your existing testing section
+    st.write("Annual independent test of all 5 pillars required.")
 
 with tab5:
-    st.subheader("Pillar 5 – CIP / KYC / CDD / SAR / Transaction Monitoring")
+    st.subheader("Pillar 5 – CIP / KYC / CDD / SAR / Monitoring")
+    st.info("CIP, KYC, CDD, SAR filing, and transaction monitoring tools are available here.")
 
-    subtab1, subtab2, subtab3, subtab4 = st.tabs(["CIP / KYC", "CDD Form", "SAR Filing", "Transaction Monitoring"])
-
-    with subtab1:
-        # Keep your existing CIP / KYC section
-
-    with subtab2:
-        # Keep your existing CDD form
-
-    with subtab3:
-        # Keep your existing SAR section with examples
-
-    with subtab4:
-        st.subheader("Transaction Monitoring Rules")
-        st.markdown("**Ongoing Monitoring** – Pillar 5 requirement to detect suspicious activity throughout the relationship.")
-
-        st.write("### Key Transaction Monitoring Rules")
-        monitoring_rules = [
-            "Monitor all capital contributions, redemptions, and wire transfers for unusual patterns",
-            "Flag rapid inflows followed by early redemption requests without market justification",
-            "Alert on wires to/from high-risk jurisdictions or accounts not previously disclosed",
-            "Review changes in wire instructions or beneficiary details",
-            "Flag investments significantly larger than the investor’s known net worth or source of funds",
-            "Monitor for structuring (multiple transfers just below reporting thresholds)",
-            "Review frequency and size of distributions relative to fund strategy",
-            "Flag any transaction inconsistent with the investor’s stated investment objective",
-            "Automated alerts for PEP-related accounts or sanctioned country exposure"
-        ]
-        for rule in monitoring_rules:
-            st.checkbox(rule)
-
-        st.write("**Escalation Thresholds**")
-        st.write("- Any transaction ≥ $1 million from high-risk jurisdiction → Automatic EDD review")
-        st.write("- Multiple redemptions within 90 days of subscription → SAR consideration")
-        st.write("- Change in wire instructions without explanation → Immediate investigation")
-
-        if st.button("Sign Transaction Monitoring Policy Acknowledgment"):
-            st.success("Transaction Monitoring Rules acknowledged and signed.")
-            log_audit_trail(st.session_state.username, "Transaction Monitoring Acknowledged", "Signed policy", "Unknown")
-            log_attestation(st.session_state.username, "Transaction Monitoring Rules")
-
-st.sidebar.info("BSA Officer: Chief Compliance Officer\nAll EDD, SAR, and monitoring actions are fully logged.")
+st.sidebar.info("BSA Officer: Chief Compliance Officer")

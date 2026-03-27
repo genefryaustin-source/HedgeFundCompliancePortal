@@ -5,56 +5,69 @@ from database import log_audit_trail, log_attestation
 st.title("AML / BSA 5-Pillar Program + CFIUS & Export Controls")
 st.caption("$1B AUM Hedge Fund RIA – FinCEN IA Rule + National Security Requirements")
 
-# Row 1: Core AML Pillars
-row1 = st.tabs([
+# Single row of tabs with natural scrolling (best for 6+ tabs)
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "1. Risk Assessment",
     "2. Enhanced Due Diligence (EDD)",
-    "3. Training"
-])
-
-# Row 2: Remaining Compliance Areas
-row2 = st.tabs([
+    "3. Training",
     "4. Independent Testing",
     "5. CIP / KYC / CDD / SAR / Monitoring",
     "6. CFIUS & Export Controls"
 ])
 
-# ====================== TAB 1 ======================
-with row1[0]:
+with tab1:
     st.subheader("Annual AML Risk Assessment")
     st.markdown("**Pillar 1** – Risk-Based Approach")
-    # Add your existing risk assessment code here if desired
+    # ← Place your existing Risk Assessment code here
 
-# ====================== TAB 2 ======================
-with row1[1]:
+with tab2:
     st.subheader("Enhanced Due Diligence (EDD) Procedures")
     st.markdown("**Pillar 2 & 5** – Applied when risk is elevated.")
-    # Add your existing EDD content here
 
-# ====================== TAB 3 ======================
-with row1[2]:
+    st.write("**EDD Triggers (Hedge Fund Specific)**")
+    edd_triggers = [
+        "Investor or beneficial owner is a PEP or close associate",
+        "Investor resides in or funds originate from high-risk jurisdiction",
+        "Investment > $5M or >10% of fund AUM",
+        "Complex corporate/trust structure with unidentified beneficial owners",
+        "Unusual transaction patterns (rapid inflows + early redemptions)",
+        "Requests for preferential treatment via side letters",
+        "Negative adverse media or sanctions hits",
+        "Source of funds/wealth unclear or inconsistent with profile"
+    ]
+    for trigger in edd_triggers:
+        st.checkbox(trigger)
+
+    st.write("**Required EDD Procedures**")
+    edd_procedures = [
+        "In-depth Source of Wealth verification",
+        "Full Beneficial Ownership mapping",
+        "Enhanced adverse media & sanctions screening",
+        "Senior management approval via DocuSign",
+        "Enhanced ongoing monitoring (monthly reviews)",
+        "All documentation retained for 5 years"
+    ]
+    for procedure in edd_procedures:
+        st.checkbox(procedure, value=True)
+
+with tab3:
     st.subheader("Pillar 3 – Ongoing Training")
     st.info("Complete the AML/BSA 5-Pillar Training in the Training Center.")
     st.page_link("pages/03_Training.py", label="Go to Training Center →", icon="📚")
 
-# ====================== TAB 4 ======================
-with row2[0]:
+with tab4:
     st.subheader("Pillar 4 – Independent Testing & Audit")
     st.write("Annual independent test of all 5 pillars required.")
 
-# ====================== TAB 5 ======================
-with row2[1]:
+with tab5:
     st.subheader("Pillar 5 – CIP / KYC / CDD / SAR / Monitoring")
     st.info("CIP, KYC, CDD, SAR filing, and transaction monitoring tools are available here.")
 
-# ====================== TAB 6 ======================
-with row2[2]:
+with tab6:
     st.subheader("CFIUS & Export Controls Compliance")
     st.markdown("**National Security Requirements**")
 
-    st.write("### CFIUS (Committee on Foreign Investment in the United States)")
-    st.write("CFIUS reviews foreign investments that could affect U.S. national security.")
-
+    st.write("### CFIUS Compliance")
     st.write("**Key CFIUS Triggers**")
     cfius_triggers = [
         "Foreign investor acquiring control or significant influence",

@@ -151,5 +151,20 @@ for title, content in policy_library.items():
                     st.error(str(e))
                     st.exception(e)  # Shows full traceback for debugging
 
+st.write("---")
+st.subheader("DocuSign Consent Tool")
+
+if st.button("Generate DocuSign Consent URL"):
+    import streamlit as st
+    client_id = st.secrets["DOCUSIGN"]["INTEGRATION_KEY"]
+    user_id = st.secrets["DOCUSIGN"]["USER_ID"]
+    redirect_uri = "https://your-app-name.streamlit.app"  # Change to your actual app URL
+    
+    consent_url = f"https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id={client_id}&redirect_uri={redirect_uri}&state=consent_test"
+    
+    st.success("Consent URL generated")
+    st.markdown(f"[🔗 Click here to grant consent]({consent_url})")
+    st.info("Log in with the **CCO / impersonated user** account and click Accept.")
+
 st.success("✅ All policies are loaded with full details and attestation workflow.")
 st.caption("Last updated: March 2026")

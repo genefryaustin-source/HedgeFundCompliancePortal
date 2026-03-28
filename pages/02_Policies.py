@@ -204,5 +204,5 @@ for title, content in policy_library.items():
                 except Exception as e:
                     st.error(f"Error generating policy: {str(e)}")
 
-st.success("✅ All required SOC 2 Type 2, SEC, and regulatory policies are now available with full details and attestation workflow.")
+st.success("✅ All required regulatory policies are now available with full details and attestation workflow.")
 st.caption("Last updated: March 2026")

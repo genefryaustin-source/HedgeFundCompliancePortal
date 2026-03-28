@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 from database import log_audit_trail, log_attestation
 
-st.title("AML / BSA 5-Pillar Program + CFIUS & Export Controls")
+st.title("AML / BSA 5-Pillar Program + CFIUS, FOCI & Export Controls")
 st.caption("$1B AUM Hedge Fund RIA – FinCEN IA Rule + National Security Requirements")
 
 st.info("""
@@ -17,7 +17,7 @@ tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "3. Training",
     "4. Independent Testing",
     "5. CIP / KYC / CDD / SAR / CTR / UBO / PEP",
-    "6. CFIUS & Export Controls"
+    "6. CFIUS, FOCI & Export Controls"
 ])
 
 with tab1:
@@ -259,6 +259,65 @@ with tab5:
 
 with tab6:
     st.subheader("CFIUS & Export Controls Compliance")
-    # Your existing CFIUS & Export Controls section stays here
+    st.markdown("**National Security Requirements**")
+
+    st.write("### CFIUS Compliance")
+    st.write("**Key CFIUS Triggers**")
+    cfius_triggers = [
+        "Foreign investor acquiring control or significant influence",
+        "Investment in critical technology",
+        "Investment in critical infrastructure",
+        "Access to sensitive personal data of U.S. citizens",
+        "Foreign government-linked investors"
+    ]
+    for trigger in cfius_triggers:
+        st.checkbox(trigger)
+
+    st.write("**CFIUS Critical Technologies Examples**")
+    critical_tech = [
+        "Artificial Intelligence and machine learning systems",
+        "Semiconductors and semiconductor manufacturing equipment",
+        "Quantum computing and quantum information sciences",
+        "Biotechnology and biological technologies",
+        "Advanced robotics and autonomous systems",
+        "Additive manufacturing (3D printing) for defense applications",
+        "Advanced materials and metamaterials",
+        "Aerospace and defense-related technologies",
+        "Nuclear technologies",
+        "Encryption and cybersecurity technologies"
+    ]
+    for item in critical_tech:
+        st.checkbox(item)
+
+    st.write("**CFIUS Mitigation Agreements** (when required by CFIUS)")
+    st.markdown("CFIUS may require legally binding mitigation agreements to address national security concerns. Common mitigation strategies include:")
+    mitigation = [
+        "Establish a U.S.-based security committee with independent directors to oversee sensitive operations",
+        "Appoint a CFIUS-approved security officer with veto rights over decisions involving critical technology or data",
+        "Implement strict information security protocols, including data segregation and access controls",
+        "Limit foreign investor access to critical technology, intellectual property, or sensitive personal data",
+        "Require prior CFIUS approval for any change in ownership, key personnel, or technology transfers",
+        "Undergo regular third-party audits and submit periodic compliance reports to CFIUS",
+        "Include termination or divestiture rights if compliance with the mitigation agreement fails",
+        "Restrict foreign investor board observer rights or information access rights",
+        "Establish physical and logical separation of sensitive U.S. operations from foreign parent entities"
+    ]
+    for item in mitigation:
+        st.checkbox(item, value=True)
+
+    st.write("### Export Controls Compliance (ITAR & EAR)")
+    st.write("**Required Procedures**")
+    export_controls = [
+        "Screen investments for ITAR-controlled defense articles",
+        "Screen for EAR-controlled dual-use items and technology",
+        "Implement controls to prevent unauthorized export of technical data",
+        "Obtain export licenses when required",
+        "Include export control clauses in subscription agreements",
+        "Train deal teams and compliance staff on export controls"
+    ]
+    for item in export_controls:
+        st.checkbox(item, value=True)
+
+    st.info("**Note**: CFIUS mitigation agreements can significantly impact fund governance and operational flexibility.")
 
 st.sidebar.info("BSA Officer: Chief Compliance Officer\nAll actions are logged with full audit trail.")

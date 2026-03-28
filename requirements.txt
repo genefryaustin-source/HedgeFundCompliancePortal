@@ -3,3 +3,5 @@ streamlit-authenticator
 pandas
 reportlab
 PyPDF2
+text
+docusign-esign

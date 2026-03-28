@@ -176,30 +176,30 @@ for title, content in policy_library.items():
     with st.expander(f"📄 {title}", expanded=False):
         st.markdown(content)
         
-        col1, col2 = st.columns([4, 1])
-        with col2:
-            if st.button(f"Generate PDF & Send for DocuSign", key=f"sign_{title.replace(' ', '_').replace('/', '_')}"):
-                try:
-                    drive_id, envelope_id, pdf_path = generate_and_sign_policy(
-                        title=title,
-                        content=content,
-                        username=st.session_state.get("username", "CCO"),
-                        email=st.session_state.get("email", "cco@hedgefund.com"),
-                        folder_id="Compliance_Policies"
-                    )
-                    st.success(f"✅ {title} PDF generated and sent for electronic signature!")
-                    log_audit_trail(
-                        st.session_state.get("username", "Unknown"),
-                        "Policy Attestation Generated",
-                        title,
-                        "Unknown"
-                    )
-                    log_attestation(
-                        st.session_state.get("username", "Unknown"),
-                        title
-                    )
-                except Exception as e:
-                    st.error(f"Error generating {title}: {str(e)}")
+                col1, col2 = st.columns([4, 1])
+                                 with col2:
+                                     if st.button(f"Generate PDF & Send for DocuSign", key=f"sign_{title.replace(' ', '_').replace('/', '_')}"):
+                                         with st.spinner("Generating PDF and sending to DocuSign..."):
+                                             try:
+                                                 drive_id, envelope_id, pdf_path = generate_and_sign_policy(
+                                                     title=title,
+                                                     content=content,
+                                                      username=st.session_state.get("username", "CCO"),
+                                                      email=st.session_state.get("email", "cco@hedgefund.com"),
+                                                     folder_id="Compliance_Policies"
+                                                  )
+                                                  st.success(f"✅ PDF generated and envelope sent! Envelope ID: {envelope_id}")
+                                                  st.info(f"PDF saved locally: {pdf_path}")
+                                                  log_audit_trail(st.session_state.get("username", "Unknown"), "Policy Sent for Signature", title, "Unknown")
+                                                  log_attestation(st.session_state.get("username", "Unknown"), title)
+                                              except Exception as e:
+                                                  st.error(f"❌ Failed: {str(e)}")
+                                                  st.exception(e)   # This shows the full traceback on the page
+
+
+st.write("---")
+if st.button("Test Button - Click Me"):
+    st.success("Button works! If you see this, the issue is inside generate_and_sign_policy()")
 
 st.success("✅ All required SOC 2 Type 2, SEC, AML/BSA, CFIUS, and regulatory policies are now displayed in full detail with attestation workflow.")
 st.caption("Policies updated: March 2026 | Ready for SOC 2 Type 2 and CFIUS audit")
